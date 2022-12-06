@@ -178,6 +178,23 @@ python-versions = ">=3.7"
 typing-extensions = "*"
 
 [[package]]
+name = "pyvisa-py"
+version = "0.5.3"
+description = "Pure Python implementation of a VISA library."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+pyvisa = ">=1.12.0"
+typing-extensions = "*"
+
+[package.extras]
+gpib-ctypes = ["gpib-ctypes (>=0.3.0)"]
+serial = ["pyserial (>=3.0)"]
+usb = ["pyusb"]
+
+[[package]]
 name = "setuptools"
 version = "65.6.3"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -235,7 +252,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "41850706449b70e78c7818359d34b2a8a60b2040d66f3bdaa3c967c36380ac51"
+content-hash = "b46ae43cd65a7f7a0266bcc2642ccf35877fe882a5a4a21da9f6aefa9b77ee72"
 
 [metadata.files]
 contourpy = [
@@ -575,6 +592,10 @@ pytz = [
 pyvisa = [
     {file = "PyVISA-1.12.0-py3-none-any.whl", hash = "sha256:4cbe2f37f75dd233638154f377af7522b8c1dc8324cce3dc3e9563a9b7b84add"},
     {file = "PyVISA-1.12.0.tar.gz", hash = "sha256:73a38e6bf7431449bd3e1c7bf51a995f62fcae68df580c01c30628629c6b5cbf"},
+]
+pyvisa-py = [
+    {file = "PyVISA-py-0.5.3.tar.gz", hash = "sha256:4c80954ce454582169ecfd7117b3df8c3b668bd62073aa6798e92d3d1395f58a"},
+    {file = "PyVISA_py-0.5.3-py3-none-any.whl", hash = "sha256:9f876de5945560421424c62b7880f328b59530fac6fbcbe604ae71646632b331"},
 ]
 setuptools = [
     {file = "setuptools-65.6.3-py3-none-any.whl", hash = "sha256:57f6f22bde4e042978bcd50176fdb381d7c21a9efa4041202288d3737a0c6a54"},
