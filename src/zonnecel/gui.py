@@ -25,7 +25,7 @@ class UserInterface(QtWidgets.QMainWindow):
 
         # add plot widget
         self.plot_widget = pg.PlotWidget()
-        
+        self.setWindowTitle("Graphical user interface for solar cell measurements")
 
         # add layouts and widgets
         vbox = QtWidgets.QVBoxLayout(central_widget)
@@ -38,44 +38,49 @@ class UserInterface(QtWidgets.QMainWindow):
         vbox.addLayout(hbox3)
 
         # buttons and text
-        # first hbox and add min and max values
+        # first and second hbox and add min and max values
         self.startwlabel = QtWidgets.QLabel("Start:")
         hbox.addWidget(self.startwlabel) 
         self.startwaarde = QtWidgets.QDoubleSpinBox()
-        hbox.addWidget(self.startwaarde)
+        hbox2.addWidget(self.startwaarde)
         self.startwaarde.setMinimum(0)
         self.startwaarde.setMaximum(3.3)
         self.stopwlabel = QtWidgets.QLabel("Stop:")
         hbox.addWidget(self.stopwlabel)
         self.stopwaarde = QtWidgets.QDoubleSpinBox()
-        hbox.addWidget(self.stopwaarde)
+        hbox2.addWidget(self.stopwaarde)
         self.stopwaarde.setMaximum(3.3)
         self.measurementslabel = QtWidgets.QLabel("Amount of measurements:")
         hbox.addWidget(self.measurementslabel) 
         self.measurements = QtWidgets.QSpinBox()
-        hbox.addWidget(self.measurements)
+        hbox2.addWidget(self.measurements)
         self.measurements.setMinimum(1)
-
-        #second hbox
-        add_start_button = QtWidgets.QPushButton("Do a measurement")
-        hbox2.addWidget(add_start_button)
-        add_save_button = QtWidgets.QPushButton("Save Data")
-        hbox2.addWidget(add_save_button)
-        
-        # third hbox (ports)
         self.portlabel = QtWidgets.QLabel("Add port you want to use:")
-        hbox3.addWidget(self.portlabel)
+        hbox.addWidget(self.portlabel)
         self.add_port_choise = QtWidgets.QComboBox()
         self.add_port_choise.addItems(show_devices())
-        hbox3.addWidget(self.add_port_choise)
+        hbox2.addWidget(self.add_port_choise)
+
+        #third hbox
+        add_start_button = QtWidgets.QPushButton("Do a measurement")
+        hbox3.addWidget(add_start_button)
+        add_UI_button = QtWidgets.QPushButton("voltage-current graph")
+        hbox3.addWidget(add_UI_button)
+        add_PR_button = QtWidgets.QPushButton("power-resistance curve")
+        hbox3.addWidget(add_PR_button)
+        add_save_button = QtWidgets.QPushButton("Save voltage-current Data")
+        hbox3.addWidget(add_save_button)
         
+
         # set initial values
         self.startwaarde.setValue(0)
         self.stopwaarde.setValue(3.3)
         self.measurements.setValue(1)
 
         #signals
-        add_start_button.clicked.connect(self.plot)
+        add_start_button.clicked.connect(self.scan_data)
+        add_UI_button.clicked.connect(self.plot_UI)
+        add_PR_button.clicked.connect(self.plot_PR)
         add_save_button.clicked.connect(self.save_data)
 
         # intitial lists
@@ -87,15 +92,26 @@ class UserInterface(QtWidgets.QMainWindow):
 
 
     @Slot()
-    def plot(self):
-        """Plots data with the variables that are currently in the boxes/buttons
+    def scan_data(self):
+        """Get data from zonnecel experiment with the variables that are currently in the boxes/buttons
         """        
         self.plot_widget.clear()
         experiment = ZonnecelExperiment(port = self.add_port_choise.currentText())
         self.U, self.I, self.U_err, self.I_err = experiment.repeat_scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
         
-        
-        #plotting
+    def plot_UI(self):
+        # plotting U-I graph
+        error = pg.ErrorBarItem()
+        error.setData(x = np.array(self.U), y = np.array(self.I), top = np.array(self.I_err), bottom = np.array(self.I_err), left = np.array(self.U_err), right = np.array(self.U_err))
+        self.plot_widget.addItem(error)
+        self.plot_widget.plot(self.U, self.I, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
+        self.plot_widget.setLabel("left", "current (A)")
+        self.plot_widget.setLabel("bottom", "voltage (V)")
+        self.plot_widget.setTitle("Current against voltage graph")
+
+
+    def plot_PR(self):
+        # plotting P-R graph
         error = pg.ErrorBarItem()
         error.setData(x = np.array(self.U), y = np.array(self.I), top = np.array(self.I_err), bottom = np.array(self.I_err), left = np.array(self.U_err), right = np.array(self.U_err))
         self.plot_widget.addItem(error)
