@@ -55,7 +55,7 @@ class ArduinoVISADevice:
         Returns:
             int: ADC value (0 - 1023) 
         """        
-        return self.device.query("MEAS:CH0?")
+        return float(self.device.query("MEAS:CH0?"))
      
     def get_input_value(self, channel):
         """Get input value in ADC
@@ -66,7 +66,7 @@ class ArduinoVISADevice:
         Returns:
             int: ADC value (0 - 1023) in requested channel
         """        
-        return self.device.query(f"MEAS:CH{channel}?")
+        return float(self.device.query(f"MEAS:CH{channel}?"))
 
     def get_input_voltage(self, channel):
         """Get input value in Voltage using the function ADC_to_Voltage
