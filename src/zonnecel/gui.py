@@ -108,7 +108,8 @@ class UserInterface(QtWidgets.QMainWindow):
         """Saves data as a csv file that the user can name themselves
         """        
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(filter="CSV files (*.csv)")
-        pd.DataFrame(np.array(self.IU_list)).to_csv(filename) # hiermee verder
+        data_array = pd.DataFrame(np.column_stack([self.U, self.I, self.U_err, self.I_err]))
+        data_array.to_csv(filename, index = False, header = False)
 
 
 def main():
@@ -121,5 +122,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-             
  

@@ -1,4 +1,4 @@
-from model import ZonnecelExperiment
+from zonnecel.model import ZonnecelExperiment
 import matplotlib.pyplot as plt
 
 port = 'ASRL5::INSTR'
