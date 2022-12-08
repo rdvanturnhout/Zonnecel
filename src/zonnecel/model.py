@@ -23,22 +23,32 @@ class ZonnecelExperiment:
 
         voltages = []
         currents = []
+        resistances = []
+        powers = []
                 
         for U0 in range (start,stop):
             self.device.set_output_value(U0)
             U1 = self.device.get_input_voltage(channel = 1) # spanningsmeter
             U2 = self.device.get_input_voltage(channel = 2) # stroommeter
-            # U_zonnecel = 3 x U1
-            voltages.append(3*U1)
-            # I2 = U2 / R2
-            currents.append(float(U2)/R2)
+            U_zonnecel = 3 * U1
+            voltages.append(U_zonnecel)
+            I = float(U2) / R2
+            currents.append(I)
+
+            U_var = 3*U1 - U2
+            R_var = U_var/I
+            resistances.append(R_var)
+            P_zonnecel = U_zonnecel * I
+            powers.append(P_zonnecel)
 
         # print(self.measurements.currents)
-        return voltages, currents
+        return voltages, currents, resistances, powers
 
     def repeat_scan(self, start, stop, n):
         U_n = []
         I_n = []
+        R_n = []
+        P_n = []
 
         """Repeat the experiment n times with ADC inputs in the range(start, stop) to calculate the currents mean and std
 
@@ -52,9 +62,11 @@ class ZonnecelExperiment:
         """        
 
         for i in range (n):
-            U, I = self.scan(start, stop)
+            U, I, R, P = self.scan(start, stop)
             U_n.append(U)
             I_n.append(I)
+            R_n.append(R)
+            P_n.append(P)
 
-        return (np.mean(U_n,axis=0),np.mean(I_n,axis=0),
-        np.std(U_n,axis=0)/np.sqrt(n),np.std(I_n,axis=0)/np.sqrt(n))
+        return (np.mean(U_n,axis=0),np.mean(I_n,axis=0), np.mean(R_n,axis=0),np.mean(P_n,axis=0), 
+        np.std(U_n,axis=0)/np.sqrt(n),np.std(I_n,axis=0)/np.sqrt(n), np.std(R_n,axis=0)/np.sqrt(n),np.std(P_n,axis=0)/np.sqrt(n))
