@@ -40,7 +40,10 @@ class ZonnecelExperiment:
             currents.append(I)
 
             U_var = 3*U1 - U2
-            R_var = U_var/I
+            if I:
+                R_var = U_var/I
+            else:
+                R_var = 10**7
             resistances.append(R_var)
             P_zonnecel = U_zonnecel * I
             powers.append(P_zonnecel)

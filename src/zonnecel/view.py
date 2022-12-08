@@ -5,7 +5,9 @@ port = 'ASRL5::INSTR'
 experiment = ZonnecelExperiment(port)
 
 def run_experiment():
-    U, I, U_err, I_err = experiment.repeat_scan(0, 1023, 20)
+    U, I, R, P, U_err, I_err, R_err, P_err = experiment.repeat_scan(600, 700, 2)
+
+    print(I)
 
     # plotting measurements 
     plt.fig_d1 = plt.figure('Plot Voltage and Current')
