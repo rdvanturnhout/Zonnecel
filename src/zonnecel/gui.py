@@ -78,8 +78,11 @@ class UserInterface(QtWidgets.QMainWindow):
         add_start_button.clicked.connect(self.plot)
         add_save_button.clicked.connect(self.save_data)
 
-        # intitial IU list
-        self.IU_list = []
+        # intitial lists
+        self.I = []
+        self.U = []
+        self.U_err = []
+        self.I_err = []
 
 
 
@@ -89,14 +92,14 @@ class UserInterface(QtWidgets.QMainWindow):
         """        
         self.plot_widget.clear()
         experiment = ZonnecelExperiment(port = self.add_port_choise.currentText())
-        U, I, U_err, I_err = experiment.repeat_scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
+        self.U, self.I, self.U_err, self.I_err = experiment.repeat_scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
         
         
         #plotting
         error = pg.ErrorBarItem()
-        error.setData(x = np.array(U), y = np.array(I), top = np.array(I_err), bottom = np.array(I_err), left = np.array(U_err), right = np.array(U_err))
+        error.setData(x = np.array(self.U), y = np.array(self.I), top = np.array(self.I_err), bottom = np.array(self.I_err), left = np.array(self.U_err), right = np.array(self.U_err))
         self.plot_widget.addItem(error)
-        self.plot_widget.plot(U, I, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
+        self.plot_widget.plot(self.U, self.I, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
         self.plot_widget.setLabel("left", "current (A)")
         self.plot_widget.setLabel("bottom", "voltage (V)")
         self.plot_widget.setTitle("Current against voltage graph")

@@ -3,7 +3,10 @@
 
 # Arduino Device
 
-import pyvisa
+try:
+    from nsp2visasim import sim_pyvisa as pyvisa
+except ModuleNotFoundError:
+    import pyvisa
 
 def list_devices():
     # Resource Manager, Requesting a list of all available ports
