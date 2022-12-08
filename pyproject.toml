@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Graphical user interface for an experiment with a solar cell"
 authors = ["rdvanturnhout <117833887+rdvanturnhout@users.noreply.github.com> and Gwen Groeneweg <gwengroen10@gmail.com>"]
 readme = "README.md"
-# packages = [{include = "zonnecel-experiment"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
