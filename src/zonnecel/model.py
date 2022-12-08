@@ -1,8 +1,8 @@
 from arduino_device import list_devices, ArduinoVISADevice
 import numpy as np
 
-print(list_devices())
-
+def show_devices():
+    return list_devices
 
 class ZonnecelExperiment:
 # Creating lists
