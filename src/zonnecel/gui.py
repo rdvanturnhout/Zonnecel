@@ -89,8 +89,7 @@ class UserInterface(QtWidgets.QMainWindow):
         """        
         self.plot_widget.clear()
         experiment = ZonnecelExperiment(port = self.add_port_choise.currentText())
-        self.IU_list = experiment.scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
-        U, I, U_err, I_err = experiment.repeat_scan(0, 1023, 20)
+        U, I, U_err, I_err = experiment.repeat_scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
         
         
         #plotting
