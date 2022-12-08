@@ -1,4 +1,4 @@
-#grafical user interface application
+# grafical user interface application
 
 import sys
 from PySide6 import QtWidgets
@@ -88,6 +88,10 @@ class UserInterface(QtWidgets.QMainWindow):
         self.U = []
         self.U_err = []
         self.I_err = []
+        self.R = []
+        self.P = []
+        self.R_err = []
+        self.P_err = []
 
 
 
@@ -97,8 +101,9 @@ class UserInterface(QtWidgets.QMainWindow):
         """        
         self.plot_widget.clear()
         experiment = ZonnecelExperiment(port = self.add_port_choise.currentText())
-        self.U, self.I, self.U_err, self.I_err = experiment.repeat_scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
-        
+        self.U, self.I, self.R, self.P, self.U_err, self.I_err, self.R_err, self.P_err = experiment.repeat_scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
+        self.Rmax, self.Pmax = experiment.max_power(self.R, self.P)
+
     def plot_UI(self):
         # plotting U-I graph
         error = pg.ErrorBarItem()
@@ -113,12 +118,13 @@ class UserInterface(QtWidgets.QMainWindow):
     def plot_PR(self):
         # plotting P-R graph
         error = pg.ErrorBarItem()
-        error.setData(x = np.array(self.U), y = np.array(self.I), top = np.array(self.I_err), bottom = np.array(self.I_err), left = np.array(self.U_err), right = np.array(self.U_err))
+        error.setData(x = np.array(self.R), y = np.array(self.P), top = np.array(self.P_err), bottom = np.array(self.P_err), left = np.array(self.R_err), right = np.array(self.R_err))
         self.plot_widget.addItem(error)
-        self.plot_widget.plot(self.U, self.I, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
-        self.plot_widget.setLabel("left", "current (A)")
-        self.plot_widget.setLabel("bottom", "voltage (V)")
-        self.plot_widget.setTitle("Current against voltage graph")
+        self.plot_widget.plot(self.R, self.P, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
+        self.plot_widget.plot(self.Rmax, self.Pmax, symbol = "o", pen = None, symbolSize = 8, SymbolBrush = "r", symbolPen = "r")
+        self.plot_widget.setLabel("left", "power (W)")
+        self.plot_widget.setLabel("bottom", "resistance (Ω)")
+        self.plot_widget.setTitle("power-resistance graph")
     
     def save_data(self):
         """Saves data as a csv file that the user can name themselves
