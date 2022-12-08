@@ -26,8 +26,8 @@ class ZonnecelExperiment:
                 
         for U0 in range (start,stop):
             self.device.set_output_value(U0)
-            U1 = self.device.get_input_value(channel = 1) # spanningsmeter
-            U2 = self.device.get_input_value(channel = 2) # stroommeter
+            U1 = self.device.get_input_voltage(channel = 1) # spanningsmeter
+            U2 = self.device.get_input_voltage(channel = 2) # stroommeter
             # U_zonnecel = 3 x U1
             voltages.append(3*U1)
             # I2 = U2 / R2
