@@ -40,7 +40,7 @@ class ZonnecelExperiment:
         U_n = []
         I_n = []
 
-        """Repeat the experiment n times with ADC inputsin the range(start, stop) to calculate the currents mean and std
+        """Repeat the experiment n times with ADC inputs in the range(start, stop) to calculate the currents mean and std
 
         Args:
             start (int): ADC value where the experiment starts (0 - 1023)
