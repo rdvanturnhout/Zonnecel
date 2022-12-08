@@ -1,9 +1,9 @@
 #grafical user interface application
-#hello
+
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtCore import Slot
-from zonnecel.model import DiodeExperiment, show_devices
+from zonnecel.model import ZonnecelExperiment, show_devices
 import pyqtgraph as pg
 import pandas as pd
 import numpy as np
@@ -88,23 +88,16 @@ class UserInterface(QtWidgets.QMainWindow):
         """Plots data with the variables that are currently in the boxes/buttons
         """        
         self.plot_widget.clear()
-        experiment = DiodeExperiment(port = self.add_port_choise.currentText())
+        experiment = ZonnecelExperiment(port = self.add_port_choise.currentText())
         self.IU_list = experiment.scan(int(self.startwaarde.value()/3.3*1024), int(self.stopwaarde.value()/3.3*1024), self.measurements.value())
-        Ilist = []
-        Ulist = []
-        I_err = []
-        U_err = []
-        for element in self.IU_list:
-            Ilist.append(element[0])
-            Ulist.append(element[1])
-            I_err.append(element[2])
-            U_err.append(element[3])
+        U, I, U_err, I_err = experiment.repeat_scan(0, 1023, 20)
+        
         
         #plotting
         error = pg.ErrorBarItem()
-        error.setData( x = np.array(Ulist), y = np.array(Ilist), top = np.array(I_err), bottom = np.array(I_err), left = np.array(U_err), right = np.array(U_err))
+        error.setData(x = np.array(U), y = np.array(I), top = np.array(I_err), bottom = np.array(I_err), left = np.array(U_err), right = np.array(U_err))
         self.plot_widget.addItem(error)
-        self.plot_widget.plot(Ulist, Ilist, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
+        self.plot_widget.plot(U, I, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
         self.plot_widget.setLabel("left", "current (A)")
         self.plot_widget.setLabel("bottom", "voltage (V)")
         self.plot_widget.setTitle("Current against voltage graph")
