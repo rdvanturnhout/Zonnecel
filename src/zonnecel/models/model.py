@@ -1,4 +1,5 @@
 from controllers.arduino_device import list_devices, ArduinoVISADevice
+import numpy as np
 
 print(list_devices())
 
@@ -9,6 +10,10 @@ class ZonnecelExperiment:
         self.device = ArduinoVISADevice(port)
         self.voltages = []
         self.currents = []
+        self.avg_voltages = []
+        self.avg_currents = []
+        self.std_voltages = []
+        self.std_currents = []
 
     def scan(self, start, stop):
         """Run experiment with ADC inputs in range(start, stop)
@@ -33,3 +38,29 @@ class ZonnecelExperiment:
 
         # print(self.measurements.currents)
         return self.voltages, self.currents
+
+    def repeat_scan(self, start, stop, n):
+        """Repeat the experiment n times with ADC inputsin the range(start, stop) to calculate the currents mean and std
+
+        Args:
+            start (int): ADC value where the experiment starts (0 - 1023)
+            stop (int): ADC value where the experiment stops (0 - 1023)
+            n (int): number of times the experiment runs
+
+        Returns:
+            float: lists of floats, corresponding with the average voltage, average current and their standard deviation
+        """        
+
+        for i in range (n):
+            U, I = self.scan(start, stop)
+            U_avg = np.mean(U)
+            I_avg = np.mean(I)
+            U_std = np.std(U)
+            I_std = np.std(I)
+            self.avg_voltages.append(U_avg)
+            self.avg_currents.append(I_avg)
+            self.std_voltages.append(U_std)
+            self.std_currents.append(I_std)
+
+        return (self.avg_voltages.append(U_avg), self.avg_currents.append(I_avg), 
+                self.std_voltages.append(U_std), self.std_currents.append(I_std))
