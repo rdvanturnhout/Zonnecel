@@ -11,11 +11,11 @@ def list_devices():
     return rm.list_resources()
 
 def ADC_to_Voltage(ADC):
-    """Get a voltage out of a ADC value
+    """Get a voltage out of an ADC value
     Args:
         ADC (int): value between 0 - 1024
     Returns:
-        float: Voltage
+        float: voltage
     """    # from bits to voltage
     ###Voltage = 3.3*device.query("OUT:CH0 1023")/1024
     Voltage = 3.3*int(ADC)/1024
@@ -27,8 +27,8 @@ class ArduinoVISADevice:
     """Controlling and measuring the device: give inputs en request output
 
     Args:
-        value (int): ADS value between 0 - 1024 to input into device
-        channel (int): number of channel to get ouput/input ADS from
+        value (int): ADC value between 0 - 1024 to input into device
+        channel (int): number of the channel to get ouput/input ADC from
     """
     def __init__(self, port):
         # Resourcemanager, accessing device
@@ -75,6 +75,6 @@ class ArduinoVISADevice:
             channel (int): number of channel. We use 1 and 2
 
         Returns:
-            float: Voltage in requesting channel
+            float: voltage in requesting channel
         """        
         return ADC_to_Voltage(self.device.query(f"MEAS:CH{channel}?"))

@@ -1,4 +1,4 @@
-from arduino_device import list_devices, ArduinoVISADevice
+from zonnecel.arduino_device import list_devices, ArduinoVISADevice
 import numpy as np
 
 def show_devices():
