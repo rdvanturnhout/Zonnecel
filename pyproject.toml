@@ -1,20 +1,32 @@
 [tool.poetry]
 name = "zonnecel-experiment"
 version = "0.1.0"
-description = ""
-authors = ["rdvanturnhout <117833887+rdvanturnhout@users.noreply.github.com>"]
+description = "Graphical user interface for an experiment with a solar cell"
+authors = ["rdvanturnhout <117833887+rdvanturnhout@users.noreply.github.com> and Gwen Groeneweg <gwengroen10@gmail.com>"]
 readme = "README.md"
 packages = [{include = "zonnecel_experiment"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.12"
 numpy = "^1.23.5"
 pandas = "^1.5.2"
 pyserial = "^3.5"
 matplotlib = "^3.6.2"
 pyvisa-py = "^0.5.3"
+pyside6 = "^6.4.1"
+pyqtgraph = "^0.13.1"
 
+[tool.poetry.scripts]
+user_interface = "zonnecel.gui:main"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.16.5"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks.compile]
+shell = """
+pyside6-uic src/pythondaq/mainwindow.ui -o src/pythondaq/ui_mainwindow.py
+"""
