@@ -82,7 +82,7 @@ class ZonnecelExperiment:
         return (np.mean(U_n,axis=0),np.mean(I_n,axis=0), np.mean(R_n,axis=0),np.mean(P_n,axis=0), 
         np.std(U_n,axis=0)/np.sqrt(n),np.std(I_n,axis=0)/np.sqrt(n), np.std(R_n,axis=0)/np.sqrt(n),np.std(P_n,axis=0)/np.sqrt(n))
 
-    def max_power(R_list, P_list):
+    def max_power(self, R_list, P_list):
         """Get the maximum value out of the power list and its resistance
 
         Args:
@@ -92,4 +92,5 @@ class ZonnecelExperiment:
         Returns:
             float: maximum power and its resistance
         """         
-        return np.amax(P_list), R_list[np.fmax(P_list)]
+        P_max = np.amax(P_list)
+        return R_list[np.argmax(P_list)], P_max

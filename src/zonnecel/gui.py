@@ -106,9 +106,12 @@ class UserInterface(QtWidgets.QMainWindow):
 
     def plot_UI(self):
         # plotting U-I graph
+        self.plot_widget.clear()
         error = pg.ErrorBarItem()
         error.setData(x = np.array(self.U), y = np.array(self.I), top = np.array(self.I_err), bottom = np.array(self.I_err), left = np.array(self.U_err), right = np.array(self.U_err))
         self.plot_widget.addItem(error)
+        self.plot_widget.setXRange(0, 7)
+        self.plot_widget.setYRange(0, .07)
         self.plot_widget.plot(self.U, self.I, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
         self.plot_widget.setLabel("left", "current (A)")
         self.plot_widget.setLabel("bottom", "voltage (V)")
@@ -117,11 +120,14 @@ class UserInterface(QtWidgets.QMainWindow):
 
     def plot_PR(self):
         # plotting P-R graph
+        self.plot_widget.clear()
         error = pg.ErrorBarItem()
         error.setData(x = np.array(self.R), y = np.array(self.P), top = np.array(self.P_err), bottom = np.array(self.P_err), left = np.array(self.R_err), right = np.array(self.R_err))
         self.plot_widget.addItem(error)
+        self.plot_widget.setXRange(0, 10000)
+        self.plot_widget.setYRange(0, .25)
         self.plot_widget.plot(self.R, self.P, symbol = "o", pen = None, symbolSize = 5, SymbolBrush = "b", symbolPen = "k")
-        self.plot_widget.plot(self.Rmax, self.Pmax, symbol = "o", pen = None, symbolSize = 8, SymbolBrush = "r", symbolPen = "r")
+        self.plot_widget.plot(np.array([self.Rmax]), np.array([self.Pmax]), symbol = "o", pen = None, symbolSize = 8, SymbolBrush = "r", symbolPen = "r")
         self.plot_widget.setLabel("left", "power (W)")
         self.plot_widget.setLabel("bottom", "resistance (Ω)")
         self.plot_widget.setTitle("power-resistance graph")
