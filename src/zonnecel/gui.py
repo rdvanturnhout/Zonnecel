@@ -71,7 +71,9 @@ class UserInterface(QtWidgets.QMainWindow):
         hbox3.addWidget(add_PR_button)
         add_save_button = QtWidgets.QPushButton("Save voltage-current Data")
         hbox3.addWidget(add_save_button)
-        
+        add_fit_button = QtWidgets.QPushButton("Fit IU Data")
+        hbox3.addWidget(add_fit_button)
+
 
         # set initial values
         self.startwaarde.setValue(0)
@@ -84,6 +86,7 @@ class UserInterface(QtWidgets.QMainWindow):
         add_UI_button.clicked.connect(self.plot_UI)
         add_PR_button.clicked.connect(self.plot_PR)
         add_save_button.clicked.connect(self.save_data)
+        add_fit_button.clicked.connect(self.fit)
 
         # intitial lists
         self.I = []
@@ -142,19 +145,25 @@ class UserInterface(QtWidgets.QMainWindow):
         data_array.to_csv(filename, index = False, header = False)
 
     def fit(self):
-
         # the function
-        def intensity(I0, A, U):
+        def intensity(U, I0, A):
             I = I0 * (np.exp(A * U) - 1)
             return I
 
         # make the fit to the selected data
         model = models.Model(intensity)
-        fit = model.fit(I= self.I ,U=self.U, weights = 1/self.I_err , I0 = 0.04, A = 1)
+        fit = model.fit(np.array(self.I), U = np.array(self.U), weights = 1/(np.array(self.I_err) + 10**-9) , I0 = 0.04, A = 1)
+
+        I0 = fit.params['I0'].value
+        A = fit.params["A"].value
+
+        print("I0 fit value =", I0)
+        print("A fit value =", A)
+        x = np.array(self.U)
+        y = I0 * (np.exp(A*x) - 1)
         
         # give the results of the fit
-        fit.plot(xlabel='tijd', ylabel='bits')
-        fit
+        self.plot_widget.plot(x, y)
         
 
 
