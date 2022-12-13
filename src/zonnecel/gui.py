@@ -7,6 +7,7 @@ from zonnecel.model import ZonnecelExperiment, show_devices
 import pyqtgraph as pg
 import pandas as pd
 import numpy as np
+from lmfit import models
 
 pg.setConfigOption("background", "w")
 pg.setConfigOption("foreground", "k")
@@ -141,6 +142,19 @@ class UserInterface(QtWidgets.QMainWindow):
         data_array.to_csv(filename, index = False, header = False)
 
     def fit(self):
+
+        # the function
+        def intensity(I0, A, U):
+            I = I0 * (np.exp(A * U) - 1)
+            return I
+
+        # make the fit to the selected data
+        model = models.Model(intensity)
+        fit = model.fit(I= self.I ,U=self.U, weights = 1/self.I_err , I0 = 0.04, A = 1)
+        
+        # give the results of the fit
+        fit.plot(xlabel='tijd', ylabel='bits')
+        fit
         
 
 
