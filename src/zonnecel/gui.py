@@ -75,7 +75,8 @@ class UserInterface(QtWidgets.QMainWindow):
         # set initial values
         self.startwaarde.setValue(0)
         self.stopwaarde.setValue(3.3)
-        self.measurements.setValue(1)
+        self.measurements.setValue(2)
+        self.add_port_choise.setCurrentIndex(3)
 
         #signals
         add_start_button.clicked.connect(self.scan_data)
