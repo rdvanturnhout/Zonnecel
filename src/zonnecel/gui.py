@@ -140,6 +140,9 @@ class UserInterface(QtWidgets.QMainWindow):
         data_array = pd.DataFrame(np.column_stack([self.U, self.I, self.U_err, self.I_err]))
         data_array.to_csv(filename, index = False, header = False)
 
+    def fit(self):
+        
+
 
 def main():
     """ Making instance of the QtWidgets.QApplication and our own class, call method show and making sure error is shown when something goes wrong
